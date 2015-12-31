@@ -32,7 +32,6 @@ class RedBlackTreeTest < Minitest::Test
   end
 
   def test_insert_left_leaves
-    skip
     rbtree.insert(11)
     rbtree.insert(9)
     rbtree.insert(12)

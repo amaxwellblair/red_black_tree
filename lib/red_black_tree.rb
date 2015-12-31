@@ -17,7 +17,11 @@ class RedBlackTree
     if node == nil
       node = create_node(data)
     elsif node.value > data
-      
+      search_and_place(data, node.left)
+    elsif node.value < data
+      search_and_place(data, node.right)
+    end
+  end
 
 
   end
