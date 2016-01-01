@@ -57,35 +57,67 @@ class RedBlackTree
 
   def rotate_right(node)
     if node == root
-      old_parent = node
       @root = node.left
       old_right = root.right
-      root.right = old_parent
+      root.right = node
       root.right.left = old_right
     else
-      old_parent = node
-      node = node.left
-      old_right = node.right
-      node.right = old_parent
-      node.right.left = old_right
+      new_parent = node.left
+      old_right = new_parent.right
+      new_parent.right = node
+      new_parent.right.left = old_right
+      new_parent
     end
+
   end
 
   def rotate_left(node)
     if node == root
-      old_parent = node
       @root = node.right
       old_left = root.left
-      root.left = old_parent
+      root.left = node
       root.left.right = old_left
     else
-      old_parent = node
-      node = node.right
-      old_left = node.left
-      node.left = old_parent
-      node.left.right = old_left
+      new_parent = node.right
+      old_left = new_parent.left
+      new_parent.left = node
+      new_parent.left.right = old_left
+      new_parent
     end
   end
+
+  def balance(node)
+      if node == root || parent(node).color != 1
+
+      elsif aunt(node) == parent(node)
+        if uncle(node).color == red
+          recolor_left(node)
+          balance(grandparent(node))
+        elsif node == parent(node).right
+          grandparent(node).left = rotate_left(parent(node))
+          if grandparent(node) == root
+            rotate_right(grandparent(node))
+            switch_all_colors([root, root.right])
+          elsif great_grandparent(node).right == grandparent(node)
+            great_grandparent(node).right = rotate_right(grandparent(node))
+            switch_all_colors([grandparent, grandparent.right])
+          else
+            great_grandparent(node).left = rotate_right(grandparent(node))
+            switch_all_colors([grandparent, grandparent.right])
+          end
+        elsif node == parent(node).left
+          grandparent(node).left = rotate_right(parent(node))
+          if great_grandparent(node).right == grandparent(node)
+            great_grandparent(node).right = rotate_right(grandparent(node))
+          else
+            great_grandparent(node).left = rotate_right(grandparent(node))
+          end
+          #start back up here
+        end
+
+    end
+  end
+
 
   def switch_color(node)
     node.color == 1 ? node.color = 0 : node.color = 1
@@ -109,6 +141,10 @@ class RedBlackTree
 
   def grandparent(node)
     parent(parent(node))
+  end
+
+  def great_grandparent(node)
+    parent(grandparent(node))
   end
 
   def aunt(node)
