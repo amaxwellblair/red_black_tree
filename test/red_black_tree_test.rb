@@ -35,19 +35,17 @@ class RedBlackTreeTest < Minitest::Test
     rbtree.insert(11)
     rbtree.insert(9)
     rbtree.insert(12)
-    assert_equal 9, rbtree.root.left
+    assert_equal 9, rbtree.root.left.value
   end
 
   def test_insert_right_leaves
-    skip
     rbtree.insert(11)
     rbtree.insert(9)
     rbtree.insert(12)
-    assert_equal 12, rbtree.root.right
+    assert_equal 12, rbtree.root.right.value
   end
 
   def test_includes
-    skip
     rbtree.insert(11)
     rbtree.insert(9)
     rbtree.insert(12)
@@ -55,7 +53,6 @@ class RedBlackTreeTest < Minitest::Test
   end
 
   def test_insert_multiple_subtrees
-    skip
     rbtree.insert(11)
     rbtree.insert(9)
     rbtree.insert(12)
@@ -63,6 +60,63 @@ class RedBlackTreeTest < Minitest::Test
     rbtree.insert(8)
     rbtree.insert(15)
     assert_equal true, rbtree.includes?(12)
+  end
+
+  def test_switch_color
+    rbtree.insert(11)
+    rbtree.switch_color(rbtree.root)
+    assert_equal 1, rbtree.root.color
+  end
+
+  def test_aunt
+    rbtree.insert(11)
+    rbtree.insert(9)
+    rbtree.insert(12)
+    rbtree.insert(14)
+    assert_equal rbtree.root.left, rbtree.aunt(rbtree.root.right.right)
+  end
+
+  def test_recolor
+    rbtree.insert(11)
+    rbtree.insert(9)
+    rbtree.insert(12)
+    rbtree.insert(14)
+    rbtree.recolor_right(rbtree.root.right.right)
+    assert_equal 1, rbtree.root.color
+    assert_equal 0, rbtree.root.left.color
+  end
+
+  def test_rotate_left
+    skip
+    rbtree.insert(11)
+    rbtree.insert(9)
+    rbtree.insert(12)
+    rbtree.rotate_left(2)
+    assert_equal 11, rbtree.tree[1].value
+  end
+
+  def test_rotate_right
+    skip
+    rbtree.insert(11)
+    rbtree.insert(9)
+    rbtree.insert(12)
+    assert_equal 9, rbtree.rotate_right(11)[0].right.value
+  end
+
+  def test_rotate_left_then_right
+    skip
+    rbtree.insert(11)
+    rbtree.insert(9)
+    rbtree.insert(12)
+    assert_equal 11, rbtree.rotate_left(12)[0].left.value
+  end
+
+  def test_rotate_right_then_left
+    skip
+    rbtree.insert(11)
+    rbtree.insert(9)
+    rbtree.insert(12)
+    assert_equal 9, rbtree.rotate_left(11)[0].right.value
   end
 
   def test_black_height
@@ -75,32 +129,6 @@ class RedBlackTreeTest < Minitest::Test
     rbtree.insert(15)
     assert_equal 1, rbtree.find_node(12).bh
     #not sure if this is correct
-  end
-
-  def test_recolor
-    skip
-    rbtree.insert(11)
-    rbtree.insert(9)
-    rbtree.insert(12)
-    rbtree.insert(14)
-    rbtree.recolor(14)
-    assert_equal 0, rbtree.left.color
-  end
-
-  def test_rotate_left
-    skip
-    rbtree.insert(11)
-    rbtree.insert(9)
-    rbtree.insert(12)
-    assert_equal 11, rbtree.rotate_left(12).root.left.value
-  end
-
-  def test_rotate_right
-    skip
-    rbtree.insert(11)
-    rbtree.insert(9)
-    rbtree.insert(12)
-    assert_equal 9, rbtree.rotate_left(11).root.right.value
   end
 
   def test_correct_colors
