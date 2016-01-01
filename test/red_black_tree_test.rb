@@ -87,20 +87,21 @@ class RedBlackTreeTest < Minitest::Test
   end
 
   def test_rotate_left
-    skip
     rbtree.insert(11)
     rbtree.insert(9)
     rbtree.insert(12)
-    rbtree.rotate_left(2)
-    assert_equal 11, rbtree.tree[1].value
+    rbtree.rotate_left(rbtree.root)
+    assert_equal 12, rbtree.root.value
+    assert_equal 11, rbtree.root.left.value
   end
 
   def test_rotate_right
-    skip
     rbtree.insert(11)
     rbtree.insert(9)
     rbtree.insert(12)
-    assert_equal 9, rbtree.rotate_right(11)[0].right.value
+    rbtree.rotate_right(rbtree.root)
+    assert_equal 9, rbtree.root.value
+    assert_equal 11, rbtree.root.right.value
   end
 
   def test_rotate_left_then_right

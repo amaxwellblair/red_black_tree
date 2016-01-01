@@ -48,16 +48,43 @@ class RedBlackTree
     switch_all_colors(node_family)
   end
 
-  def recolor_right(index)
-    node_family = [parent(index),
-                   grandparent(index),
-                   aunt(index)]
+  def recolor_right(node)
+    node_family = [parent(node),
+                   grandparent(node),
+                   aunt(node)]
     switch_all_colors(node_family)
   end
 
-  def rotate_left(index)
-    left(right_index(index))
+  def rotate_right(node)
+    if node == root
+      old_parent = node
+      @root = node.left
+      old_right = root.right
+      root.right = old_parent
+      root.right.left = old_right
+    else
+      old_parent = node
+      node = node.left
+      old_right = node.right
+      node.right = old_parent
+      node.right.left = old_right
+    end
+  end
 
+  def rotate_left(node)
+    if node == root
+      old_parent = node
+      @root = node.right
+      old_left = root.left
+      root.left = old_parent
+      root.left.right = old_left
+    else
+      old_parent = node
+      node = node.right
+      old_left = node.left
+      node.left = old_parent
+      node.left.right = old_left
+    end
   end
 
   def switch_color(node)
