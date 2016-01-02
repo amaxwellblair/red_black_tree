@@ -163,27 +163,14 @@ class RedBlackTreeTest < Minitest::Test
     assert_equal 13, rbtree.root.right.right.value
   end
 
-  # def test_black_height
-  #   rbtree.insert(11)
-  #   rbtree.insert(9)
-  #   rbtree.insert(12)
-  #   rbtree.insert(1)
-  #   rbtree.insert(8)
-  #   rbtree.insert(15)
-  #   assert_equal 1, rbtree.find_node(12).bh
-  #   #not sure if this is correct
-  # end
-
-  def test_correct_colors
-    skip
+  def test_black_height
     rbtree.insert(11)
     rbtree.insert(9)
     rbtree.insert(12)
     rbtree.insert(1)
     rbtree.insert(8)
     rbtree.insert(15)
-    assert_equal 0, rbtree.find_node(12).color
-    #not sure if this is correct
+    assert_equal 2, rbtree.black_height(11)
   end
 
 end

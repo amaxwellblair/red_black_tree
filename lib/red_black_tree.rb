@@ -170,6 +170,24 @@ class RedBlackTree
     end
   end
 
+  def black_height(data)
+    node = search_and_return(data)
+    black_count(node)
+  end
+
+  def black_count(node, count = 0)
+    if node.left == nil
+      count + 1
+    elsif node.left.color == 0
+      count += 1
+      black_count(node.left, count)
+    else
+      black_count(node.left, count)
+    end
+  end
+
+
+
   def switch_color(node)
     node.color == 1 ? node.color = 0 : node.color = 1
     root.color = 0
