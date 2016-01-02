@@ -1,3 +1,5 @@
+require 'pry'
+
 class RedBlackTree
   attr_reader :tree, :root
   def initialize
@@ -9,7 +11,9 @@ class RedBlackTree
       @root = create_node(data, 0)
     else
       search_and_place(data)
-      # balance(data)
+      search_and_place(data)
+      x = search_and_return(data)
+      balance(x)
     end
   end
 
@@ -26,6 +30,18 @@ class RedBlackTree
       else
         search_and_place(data, node.right)
       end
+    end
+  end
+
+  def search_and_return(data, node = root)
+    if node.nil?
+      false
+    elsif node.value == data
+      return node
+    elsif node.value > data
+      search_and_return(data, node.left)
+    elsif node.value < data
+      search_and_return(data, node.right)
     end
   end
 
@@ -87,40 +103,125 @@ class RedBlackTree
   end
 
   def balance(node)
-      if node == root || parent(node).color != 1
-
-      elsif aunt(node) == parent(node)
-        if uncle(node).color == red
-          recolor_left(node)
-          balance(grandparent(node))
-        elsif node == parent(node).right
-          grandparent(node).left = rotate_left(parent(node))
+    if node == root || parent(node).color == 0
+      nil
+    elsif aunt(node) == parent(node)
+      if !uncle(node).nil? && uncle(node).color == 1
+        recolor_left(node)
+        balance(grandparent(node))
+      elsif node == parent(node).right
+        if uncle(node).nil?
           if grandparent(node) == root
             rotate_right(grandparent(node))
             switch_all_colors([root, root.right])
           elsif great_grandparent(node).right == grandparent(node)
             great_grandparent(node).right = rotate_right(grandparent(node))
-            switch_all_colors([grandparent, grandparent.right])
+            switch_all_colors([parent(node), parent(node).right])
           else
             great_grandparent(node).left = rotate_right(grandparent(node))
-            switch_all_colors([grandparent, grandparent.right])
+            switch_all_colors([parent(node), parent(node).right])
           end
-        elsif node == parent(node).left
-          grandparent(node).left = rotate_right(parent(node))
-          if great_grandparent(node).right == grandparent(node)
-            great_grandparent(node).right = rotate_right(grandparent(node))
+        else
+          grandparent(node).left = rotate_left(parent(node))
+          if parent(node) == root
+            rotate_right(parent(node))
+            switch_all_colors([root, root.right])
+          elsif grandparent(node).right == parent(node)
+            grandparent(node).right = rotate_right(parent(node))
+            switch_all_colors([parent(node), parent(node).right])
           else
-            great_grandparent(node).left = rotate_right(grandparent(node))
+            grandparent(node).left = rotate_right(parent(node))
+            switch_all_colors([parent(node), parent(node).right])
           end
-          #start back up here
         end
-
+      elsif node == parent(node).left
+        if uncle(node).nil?
+          if grandparent(node) == root
+            rotate_right(grandparent(node))
+            switch_all_colors([root, root.right])
+          elsif great_grandparent(node).right == grandparent(node)
+            great_grandparent(node).right = rotate_right(grandparent(node))
+            switch_all_colors([parent(node), parent(node).right])
+          else
+            great_grandparent(node).left = rotate_right(grandparent(node))
+            switch_all_colors([parent(node), parent(node).right])
+          end
+        else
+          grandparent(node).left = rotate_right(parent(node))
+          if parent(node) == root
+            rotate_right(parent(node))
+            switch_all_colors([root, root.right])
+          elsif grandparent(node).right == parent(node)
+            grandparent(node).right = rotate_right(parent(node))
+            switch_all_colors([parent(node), parent(node).right])
+          else
+            grandparent(node).left = rotate_right(parent(node))
+            switch_all_colors([parent(node), parent(node).right])
+          end
+        end
+      end
+    elsif uncle(node) == parent(node)
+      if !aunt(node).nil? && aunt(node).color == 1
+        recolor_right(node)
+        balance(grandparent(node))
+      elsif node == parent(node).right
+        if aunt(node).nil?
+          if grandparent(node) == root
+            rotate_left(grandparent(node))
+            switch_all_colors([root, root.left])
+          elsif great_grandparent(node).right == grandparent(node)
+            great_grandparent(node).right = rotate_left(grandparent(node))
+            switch_all_colors([parent(node), parent(node).left])
+          else
+            great_grandparent(node).left = rotate_left(grandparent(node))
+            switch_all_colors([parent(node), parent(node).left])
+          end
+        else
+          grandparent(node).right = rotate_left(parent(node))
+          if parent(node) == root
+            rotate_left(parent(node))
+            switch_all_colors([root, root.left])
+          elsif grandparent(node).right == parent(node)
+            grandparent(node).right = rotate_left(parent(node))
+            switch_all_colors([parent(node), parent(node).left])
+          else
+            grandparent(node).left = rotate_left(parent(node))
+            switch_all_colors([parent(node), parent(node).left])
+          end
+        end
+      elsif node == parent(node).left
+        if aunt(node).nil?
+          if grandparent(node) == root
+            rotate_left(grandparent(node))
+            switch_all_colors([root, root.left])
+          elsif great_grandparent(node).right == grandparent(node)
+            great_grandparent(node).right = rotate_left(grandparent(node))
+            switch_all_colors([parent(node), parent(node).left])
+          else
+            great_grandparent(node).left = rotate_left(grandparent(node))
+            switch_all_colors([parent(node), parent(node).left])
+          end
+        else
+          grandparent(node).right = rotate_right(parent(node))
+          if parent(node) == root
+            rotate_left(parent(node))
+            switch_all_colors([root, root.left])
+          elsif grandparent(node).right == parent(node)
+            grandparent(node).right = rotate_left(parent(node))
+            switch_all_colors([parent(node), parent(node).left])
+          else
+            grandparent(node).left = rotate_left(parent(node))
+            switch_all_colors([parent(node), parent(node).left])
+          end
+        end
+      end
     end
   end
 
 
   def switch_color(node)
     node.color == 1 ? node.color = 0 : node.color = 1
+    root.color = 0
   end
 
   def switch_all_colors(node_family)
