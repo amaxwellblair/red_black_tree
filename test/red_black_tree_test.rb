@@ -52,15 +52,15 @@ class RedBlackTreeTest < Minitest::Test
     assert_equal true, rbtree.includes?(12)
   end
 
-  # def test_insert_multiple_subtrees
-  #   rbtree.insert(11)
-  #   rbtree.insert(9)
-  #   rbtree.insert(12)
-  #   rbtree.insert(1)
-  #   rbtree.insert(8)
-  #   rbtree.insert(15)
-  #   assert_equal true, rbtree.includes?(12)
-  # end
+  def test_insert_multiple_subtrees
+    rbtree.insert(11)
+    rbtree.insert(9)
+    rbtree.insert(12)
+    rbtree.insert(1)
+    rbtree.insert(8)
+    rbtree.insert(15)
+    assert_equal true, rbtree.includes?(12)
+  end
 
   def test_switch_root_color
     rbtree.insert(11)
